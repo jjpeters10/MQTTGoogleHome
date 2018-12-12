@@ -25,7 +25,7 @@ var app = express();
 var mqttClient =  mqtt.connect(process.env.CLOUDMQTT_URL);
 
 mqttClient.on('connect', function () {
-  mqttClient.subscribe('/post/');
+  mqttClient.subscribe('post');
 });
 
 mqttClient.on('message', function (t, m) {
