@@ -63,6 +63,7 @@ app.get('/keep_alive/', function (req, res) {
 
 app.post('/post/', function (req, res) {
     mqttClient.publish(req.body['topic'], req.body['message']);
+    console.log("Info has been posted!")
     res.sendStatus(200);
 });
 
