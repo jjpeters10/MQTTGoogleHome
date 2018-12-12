@@ -56,52 +56,6 @@ function logRequest(req, res, next) {
     next();
 }
 
-function authorizeUser(req, res, next) {
-    if (settings.auth_key && req.body['key'] != settings.auth_key) {
-        console.log('Request is not authorized.');
-        res.sendStatus(401);
-    }
-    else {
-        next();
-    }
-}
-
-function checkSingleFileUpload(req, res, next) {
-    if (req.query.single) {
-        var upload = multer().single(req.query.single);
-
-        upload(req, res, next);
-    }
-    else {
-        next();
-    }
-}
-
-function checkMessagePathQueryParameter(req, res, next) {
-    if (req.query.path) {
-        req.body.message = req.body[req.query.path];
-    }
-    next();
-}
-
-function checkTopicQueryParameter(req, res, next) {
-
-    if (req.query.topic) {
-        req.body.topic = req.query.topic;
-    }
-
-    next();
-}
-
-function ensureTopicSpecified(req, res, next) {
-    if (!req.body.topic) {
-        res.status(500).send('Topic not specified');
-    }
-    else {
-        next();
-    }
-}
-
 app.get('/keep_alive/', logRequest, function (req, res) {
     mqttClient.publish(settings.keepalive.topic, settings.keepalive.message);
     res.sendStatus(200);
@@ -110,38 +64,6 @@ app.get('/keep_alive/', logRequest, function (req, res) {
 app.post('/post/', function (req, res) {
     mqttClient.publish(req.body['topic'], req.body['message']);
     res.sendStatus(200);
-});
-
-app.get('/subscribe/', logRequest, authorizeUser, function (req, res) {
-
-    var topic = req.query.topic;
-
-    if (!topic) {
-        res.status(500).send('topic not specified');
-    }
-    else {
-        // get a new mqttClient
-        // so we dont constantly add listeners on the 'global' mqttClient
-        var mqttClient = getMqttClient();
-
-        mqttClient.on('connect', function () {
-            mqttClient.subscribe(topic);
-        });
-
-        mqttClient.on('message', function (t, m) {
-            if (t === topic) {
-                res.write(m);
-            }
-        });
-
-        req.on("close", function () {
-            mqttClient.end();
-        });
-
-        req.on("end", function () {
-            mqttClient.end();
-        });
-    }
 });
 
 app.listen(app.get('port'), function () {
