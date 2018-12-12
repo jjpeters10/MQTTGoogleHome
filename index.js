@@ -21,21 +21,8 @@ var multer = require('multer');
 
 var app = express();
 
-function getMqttClient() {
 
-    var options = {
-        username: settings.mqtt.user,
-        password: settings.mqtt.password
-    };
-
-    if (settings.mqtt.clientId) {
-        options.clientId = settings.mqtt.clientId
-    }
-    console.log(process.env.CLOUDMQTT_URL)
-    return mqtt.connect(settings.mqtt.host, options);
-}
-
-var mqttClient = getMqttClient();
+var mqttClient =  mqtt.connect(process.env.CLOUDMQTT_URL);
 
 mqttClient.on('connect', function () {
   mqttClient.subscribe('/post/', function(err, granted){
