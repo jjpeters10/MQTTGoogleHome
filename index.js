@@ -56,7 +56,7 @@ function logRequest(req, res, next) {
     next();
 }
 
-app.get('/keep_alive/', logRequest, function (req, res) {
+app.get('/keep_alive/', function (req, res) {
     mqttClient.publish(settings.keepalive.topic, settings.keepalive.message);
     res.sendStatus(200);
 });
