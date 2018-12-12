@@ -25,11 +25,8 @@ var app = express();
 var mqttClient =  mqtt.connect(process.env.CLOUDMQTT_URL);
 
 mqttClient.on('connect', function () {
-  mqttClient.subscribe('/post/', function(err, granted){
-    console.log(granted)
-  });
+  mqttClient.subscribe('/post/');
 });
-
 
 mqttClient.on('message', function (t, m) {
   if (t === '/post/') {
@@ -39,9 +36,6 @@ mqttClient.on('message', function (t, m) {
 
 app.set('port', settings.http_port);
 app.use(bodyParser.json());
-
-
-mqttClient.subscribe('/port/')
 
 app.post('/post/', function (req, res) {
     mqttClient.publish(req.body['topic'], req.body['message']);
