@@ -37,6 +37,8 @@ app.use(bodyParser.json());
 
 app.post('/post/', function (req, res) {
     mqttClient.publish(req.body['topic'], req.body['message']);
+    console.log(req.body['topic'])
+    console.log(req.body['message'])
     console.log("Info has been posted!")
     res.sendStatus(200);
 });
