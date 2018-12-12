@@ -31,7 +31,7 @@ function getMqttClient() {
     if (settings.mqtt.clientId) {
         options.clientId = settings.mqtt.clientId
     }
-
+    console.log(settings.mqtt.host)
     return mqtt.connect(settings.mqtt.host, options);
 }
 
