@@ -42,8 +42,31 @@ app.use(bodyParser.json());
 
 
 app.get('/post/', function (req, res) {
+
     res.send('POST request to the homepage')
+
+    var mqttClient = getMqttClient();
+
+    mqttClient.on('connect', function () {
+      mqttClient.subscribe('/post/');
+    });
+
+    mqttClient.on('message', function (t, m) {
+        if (t === topic) {
+          res.write(m);
+        }
+    });
+
+    req.on("close", function () {
+      mqttClient.end();
+    });
+
+    req.on("end", function () {
+      mqttClient.end();
+    });
+
     res.sendStatus(200);
+
 });
 
 app.post('/post/', function (req, res) {
