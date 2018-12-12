@@ -37,37 +37,22 @@ function getMqttClient() {
 
 var mqttClient = getMqttClient();
 
+mqttClient.on('connect', function () {
+  mqttClient.subscribe('/post/');
+});
+
+
+mqttClient.on('message', function (t, m) {
+  if (t === '/post/') {
+    console.log(m)
+  }
+});
+
 app.set('port', settings.http_port);
 app.use(bodyParser.json());
 
 
-app.get('/post/', function (req, res) {
-
-    res.send('POST request to the homepage')
-    res.sendStatus(200);
-    var mqttClient = getMqttClient();
-
-    mqttClient.on('connect', function () {
-      mqttClient.subscribe('/post/');
-    });
-
-    mqttClient.on('message', function (t, m) {
-        if (t === topic) {
-          res.send(m);
-        }
-    });
-
-    req.on("close", function () {
-      mqttClient.end();
-    });
-
-    req.on("end", function () {
-      mqttClient.end();
-    });
-
-
-
-});
+mqttClient.subscribe('/port/')
 
 app.post('/post/', function (req, res) {
     mqttClient.publish(req.body['topic'], req.body['message']);
