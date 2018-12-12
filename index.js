@@ -38,7 +38,9 @@ function getMqttClient() {
 var mqttClient = getMqttClient();
 
 mqttClient.on('connect', function () {
-  mqttClient.subscribe('/post/');
+  mqttClient.subscribe('/post/', function(err, granted){
+    console.log(granted)
+  });
 });
 
 
