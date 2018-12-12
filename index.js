@@ -40,24 +40,9 @@ var mqttClient = getMqttClient();
 app.set('port', settings.http_port);
 app.use(bodyParser.json());
 
-function logRequest(req, res, next) {
-    var ip = req.headers['x-forwarded-for'] ||
-        req.connection.remoteAddress;
-    var message = 'Received request [' + req.originalUrl +
-        '] from [' + ip + ']';
 
-    if (settings.debug) {
-        message += ' with payload [' + JSON.stringify(req.body) + ']';
-    } else {
-        message += '.';
-    }
-    console.log(message);
-
-    next();
-}
-
-app.get('/keep_alive/', function (req, res) {
-    mqttClient.publish(settings.keepalive.topic, settings.keepalive.message);
+app.get('/post/', function (req, res) {
+    res.send('POST request to the homepage')
     res.sendStatus(200);
 });
 
