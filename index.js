@@ -29,9 +29,7 @@ mqttClient.on('connect', function () {
 });
 
 mqttClient.on('message', function (t, m) {
-  if (t === '/post/') {
     console.log(m)
-  }
 });
 
 app.set('port', settings.http_port);
