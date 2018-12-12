@@ -24,6 +24,16 @@ var app = express();
 
 var mqttClient =  mqtt.connect(process.env.CLOUDMQTT_URL);
 
+mqttClient.on('connect', function () {
+  console.log("Connected!")
+  mqttClient.subscribe('post');
+});
+
+mqttClient.on('message', function (t, m) {
+  console.log("Got a message!")
+    console.log(m.toString())
+});
+
 app.set('port', settings.http_port);
 app.use(bodyParser.json());
 
