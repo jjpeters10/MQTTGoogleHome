@@ -29,7 +29,7 @@ mqttClient.on('connect', function () {
 });
 
 mqttClient.on('message', function (t, m) {
-    console.log(m)
+    console.log(str(m))
 });
 
 app.set('port', settings.http_port);
