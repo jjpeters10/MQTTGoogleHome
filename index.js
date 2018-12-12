@@ -44,7 +44,7 @@ app.use(bodyParser.json());
 app.get('/post/', function (req, res) {
 
     res.send('POST request to the homepage')
-
+    res.sendStatus(200);
     var mqttClient = getMqttClient();
 
     mqttClient.on('connect', function () {
@@ -65,7 +65,7 @@ app.get('/post/', function (req, res) {
       mqttClient.end();
     });
 
-    res.sendStatus(200);
+
 
 });
 
