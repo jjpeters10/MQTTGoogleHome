@@ -31,7 +31,7 @@ function getMqttClient() {
     if (settings.mqtt.clientId) {
         options.clientId = settings.mqtt.clientId
     }
-    console.log(settings.mqtt.host)
+    console.log(process.env.CLOUDMQTT_URL)
     return mqtt.connect(settings.mqtt.host, options);
 }
 
