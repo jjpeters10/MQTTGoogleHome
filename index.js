@@ -53,7 +53,7 @@ app.get('/post/', function (req, res) {
 
     mqttClient.on('message', function (t, m) {
         if (t === topic) {
-          res.write(m);
+          res.send(m);
         }
     });
 
